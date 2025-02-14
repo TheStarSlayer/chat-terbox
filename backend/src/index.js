@@ -8,6 +8,7 @@ const app = express(); // Create express instance
 
 const PORT = process.env.PORT; // Import port from .env
 
+app.use(express.json()); // Returns body as JSON
 app.use("/api/auth", authRoutes); // Use authentication router 
 
 // Open app in PORT
