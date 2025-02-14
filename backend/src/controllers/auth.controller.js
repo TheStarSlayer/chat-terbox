@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/token.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
     try {
@@ -30,7 +31,7 @@ export const signup = async (req, res) => {
             generateToken(newUser._id, res);
             await newUser.save();
 
-            res.status(200).json({
+            res.status(201).json({
                 _id: newUser._id,
                 fullName: newUser.fullName,
                 email: newUser.email,
@@ -45,7 +46,7 @@ export const signup = async (req, res) => {
     }
     catch (error) {
         console.log(`Error in sign-up controller: ${error.message}`);
-        return res.status(400).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -74,7 +75,7 @@ export const login = async (req, res) => {
     }
     catch (error) {
         console.log(`Error in login controller: ${error.message}`);
-        return res.status(400).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -87,6 +88,25 @@ export const logout = (req, res) => {
     }
     catch (error) {
         console.log(`Error in logout controller: ${error.message}`);
-        return res.status(400).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+export const updateProfile = async (req, res) => {
+    try {
+        const {profilePic} = req.body;
+        const userId = req.user._id;
+
+        if (!profilePic)
+            return res.status(400).json({ message: "Profile pic is required!" });
+
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+        const updatedUser = await User.findByIdAndUpdate(userId, {profilePic: uploadResponse.secure_url}, {new: true});
+
+        res.status(200).json(updatedUser);
+    }
+    catch (error) {
+        console.log(`Error in updateProfile controller: ${error.message}`);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
