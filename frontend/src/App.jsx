@@ -13,7 +13,7 @@ import {Toaster} from "react-hot-toast";
 
 const App = () => {
   
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth, isLoggingOut } = useAuthStore();
   
   useEffect(() => {
     checkAuth();
@@ -21,7 +21,7 @@ const App = () => {
 
   console.log({authUser});
 
-  if (isCheckingAuth && !authUser) return (
+  if ((isCheckingAuth && !authUser) || (isLoggingOut)) return (
     <div className="flex items-center justify-center h-screen">
       <Loader className="size-10 animate-spin" />
     </div>
