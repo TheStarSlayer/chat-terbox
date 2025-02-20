@@ -13,13 +13,13 @@ const PORT = process.env.PORT; // Import port from .env
 
 app.use(cookieParser());
 app.use(express.json()); // Returns body as JSON
-app.use("/api/auth", authRoutes); // Use authentication router
-app.use("/api/message", messageRoutes);
-
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
     credentials: true
 }));
+
+app.use("/api/auth", authRoutes); // Use authentication router
+app.use("/api/message", messageRoutes);
 
 // Open app in PORT
 app.listen(PORT, () => {
