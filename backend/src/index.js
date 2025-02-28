@@ -20,7 +20,7 @@ app.use(cors({
 }));
 
 app.use("/api/auth", authRoutes); // Use authentication router
-app.use("/api/message", messageRoutes);
+app.use("/api/messages", messageRoutes);
 
 // Open app in PORT
 app.listen(PORT, () => {
