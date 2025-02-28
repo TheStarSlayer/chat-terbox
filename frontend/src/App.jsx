@@ -21,6 +21,10 @@ const App = () => {
     checkAuth();
   }, [checkAuth]);
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
   console.log({authUser});
 
   if ((isCheckingAuth && !authUser) || (isLoggingOut)) return (
@@ -30,7 +34,7 @@ const App = () => {
   );
 
   return (
-    <div data-theme={theme}>
+    <>
       <Navbar />
       <Routes>
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
@@ -41,7 +45,7 @@ const App = () => {
       </Routes>
 
       <Toaster />
-    </div>
+    </>
   );
 };
 
